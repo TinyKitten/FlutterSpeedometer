@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -14,9 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Speedometer',
-      theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-      ),
+      theme:
+          ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'sans-serif'),
       home: const MyHomePage(),
     );
   }
@@ -30,38 +31,36 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   double _speed = 0.0;
+  StreamSubscription<Position>? _positionStream;
+
+  final LocationSettings locationSettings = const LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+  );
 
   @override
   void initState() {
-    _updatePosition();
     super.initState();
+    _updateLocation();
   }
 
-  Future<void> _updatePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+  void _updateLocation() {
+    _positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings)
+            .listen((Position? position) {
+      if (position != null) {
+        _speed = position.speed * 3.6;
       }
-    }
+    });
+  }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+  @override
+  dispose() {
+    super.dispose();
+    if (_positionStream != null) {
+      _positionStream!.cancel();
+      _positionStream = null;
     }
-
-    Position position = await Geolocator.getCurrentPosition();
-    _speed = (position.speed * 3.6);
   }
 
   Widget _getGauge() {

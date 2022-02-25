@@ -65,37 +65,40 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _getGauge() {
-    return SfRadialGauge(axes: <RadialAxis>[
-      RadialAxis(
-          minimum: 0,
-          maximum: 150,
-          axisLineStyle: AxisLineStyle(
-              thickness: 0.15,
-              thicknessUnit: GaugeSizeUnit.factor,
-              color: Colors.grey),
-          ranges: <GaugeRange>[
-            GaugeRange(
-                startValue: 0,
-                endValue: _speed,
-                gradient: const SweepGradient(
-                    colors: <Color>[Color(0xFFBC4E9C), Color(0xFFF80759)],
-                    stops: <double>[0.25, 0.75]),
-                startWidth: 25,
-                endWidth: 25)
-          ],
-          pointers: <GaugePointer>[
-            NeedlePointer(value: _speed)
-          ],
-          annotations: <GaugeAnnotation>[
-            GaugeAnnotation(
-                widget: Container(
-                    child: Text('${_speed}km/h',
-                        style: const TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold))),
-                angle: 90,
-                positionFactor: 0.5)
-          ])
-    ]);
+    return SfRadialGauge(
+        enableLoadingAnimation: true,
+        animationDuration: 1500,
+        axes: <RadialAxis>[
+          RadialAxis(
+              minimum: 0,
+              maximum: 150,
+              axisLineStyle: AxisLineStyle(
+                  thickness: 0.15,
+                  thicknessUnit: GaugeSizeUnit.factor,
+                  color: Colors.grey),
+              ranges: <GaugeRange>[
+                GaugeRange(
+                    startValue: 0,
+                    endValue: _speed,
+                    gradient: const SweepGradient(
+                        colors: <Color>[Color(0xFFBC4E9C), Color(0xFFF80759)],
+                        stops: <double>[0.25, 0.75]),
+                    startWidth: 25,
+                    endWidth: 25)
+              ],
+              pointers: <GaugePointer>[
+                NeedlePointer(value: _speed)
+              ],
+              annotations: <GaugeAnnotation>[
+                GaugeAnnotation(
+                    widget: Container(
+                        child: Text('${_speed}km/h',
+                            style: const TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold))),
+                    angle: 90,
+                    positionFactor: 0.5)
+              ])
+        ]);
   }
 
   @override

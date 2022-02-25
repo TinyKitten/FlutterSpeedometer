@@ -89,10 +89,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     startValue: 0,
                     endValue: _speed,
                     gradient: const SweepGradient(colors: <Color>[
-                      Color(0xff3F5EFB),
-                      Color(0xffFC466B),
+                      Color(0xff12c2e9),
+                      Color(0xffc471ed),
+                      Color(0xfff64f59),
                     ], stops: <double>[
                       0,
+                      0.5,
                       1
                     ]),
                     sizeUnit: GaugeSizeUnit.factor,

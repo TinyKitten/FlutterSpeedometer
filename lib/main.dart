@@ -34,7 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<Position>? _positionStream;
 
   final LocationSettings locationSettings = const LocationSettings(
-    accuracy: LocationAccuracy.high,
+    accuracy: LocationAccuracy.bestForNavigation,
+    distanceFilter: 0,
   );
 
   @override
@@ -46,10 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void _updateLocation() {
     _positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((Position? position) {
-      if (position != null) {
-        _speed = position.speed * 3.6;
-      }
+            .listen((position) {
+      setState(() {
+        _speed = (position.speed * 3.6).floor().toDouble();
+      });
     });
   }
 
@@ -70,10 +71,13 @@ class _MyHomePageState extends State<MyHomePage> {
           RadialAxis(
               minimum: 0,
               maximum: 150,
+              majorTickStyle: const MajorTickStyle(color: Colors.white),
+              minorTickStyle: const MinorTickStyle(color: Colors.white),
+              axisLabelStyle: const GaugeTextStyle(color: Colors.white),
               axisLineStyle: const AxisLineStyle(
                   thickness: 0.15,
                   thicknessUnit: GaugeSizeUnit.factor,
-                  color: Colors.grey),
+                  color: Colors.white),
               ranges: <GaugeRange>[
                 GaugeRange(
                     startValue: 0,
@@ -81,17 +85,23 @@ class _MyHomePageState extends State<MyHomePage> {
                     gradient: const SweepGradient(
                         colors: <Color>[Color(0xFFBC4E9C), Color(0xFFF80759)],
                         stops: <double>[0.25, 0.75]),
-                    startWidth: 25,
-                    endWidth: 25)
+                    sizeUnit: GaugeSizeUnit.factor,
+                    startWidth: 0.15,
+                    endWidth: 0.15)
               ],
               pointers: <GaugePointer>[
-                NeedlePointer(value: _speed)
+                NeedlePointer(
+                    needleColor: Colors.white,
+                    value: _speed,
+                    knobStyle: const KnobStyle(color: Colors.white))
               ],
               annotations: <GaugeAnnotation>[
                 GaugeAnnotation(
-                    widget: Text('${_speed}km/h',
+                    widget: Text('${_speed.floor()}km/h',
                         style: const TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold)),
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
                     angle: 90,
                     positionFactor: 0.5)
               ])
@@ -101,6 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black87,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -35,7 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
-    distanceFilter: 100,
   );
 
   @override
@@ -71,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
           RadialAxis(
               minimum: 0,
               maximum: 150,
-              axisLineStyle: AxisLineStyle(
+              axisLineStyle: const AxisLineStyle(
                   thickness: 0.15,
                   thicknessUnit: GaugeSizeUnit.factor,
                   color: Colors.grey),
@@ -90,10 +89,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
               annotations: <GaugeAnnotation>[
                 GaugeAnnotation(
-                    widget: Container(
-                        child: Text('${_speed}km/h',
-                            style: const TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold))),
+                    widget: Text('${_speed}km/h',
+                        style: const TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold)),
                     angle: 90,
                     positionFactor: 0.5)
               ])

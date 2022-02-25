@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     Position position = await Geolocator.getCurrentPosition();
-    _speed = (position.speed * 18) / 5;
+    _speed = (position.speed * 3.6);
   }
 
   Widget _getGauge() {

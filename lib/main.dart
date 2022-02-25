@@ -31,6 +31,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   double _speed = 0.0;
+  double _maxSpeed = 0.0;
   StreamSubscription<Position>? _positionStream;
 
   final LocationSettings locationSettings = const LocationSettings(
@@ -51,6 +52,11 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _speed = (position.speed * 3.6).floor().toDouble();
       });
+      if (_maxSpeed < _speed) {
+        setState(() {
+          _maxSpeed = _speed;
+        });
+      }
     });
   }
 
@@ -71,39 +77,43 @@ class _MyHomePageState extends State<MyHomePage> {
           RadialAxis(
               minimum: 0,
               maximum: 150,
-              majorTickStyle: const MajorTickStyle(color: Colors.white),
-              minorTickStyle: const MinorTickStyle(color: Colors.white),
-              axisLabelStyle: const GaugeTextStyle(color: Colors.white),
+              majorTickStyle: const MajorTickStyle(color: Colors.white38),
+              minorTickStyle: const MinorTickStyle(color: Colors.white38),
+              axisLabelStyle: const GaugeTextStyle(color: Colors.white38),
               axisLineStyle: const AxisLineStyle(
                   thickness: 0.15,
                   thicknessUnit: GaugeSizeUnit.factor,
-                  color: Colors.white),
+                  color: Colors.white10),
               ranges: <GaugeRange>[
                 GaugeRange(
                     startValue: 0,
                     endValue: _speed,
-                    gradient: const SweepGradient(
-                        colors: <Color>[Color(0xFFBC4E9C), Color(0xFFF80759)],
-                        stops: <double>[0.25, 0.75]),
+                    gradient: const SweepGradient(colors: <Color>[
+                      Color(0xff3F5EFB),
+                      Color(0xffFC466B),
+                    ], stops: <double>[
+                      0,
+                      1
+                    ]),
                     sizeUnit: GaugeSizeUnit.factor,
                     startWidth: 0.15,
                     endWidth: 0.15)
               ],
-              pointers: <GaugePointer>[
-                NeedlePointer(
-                    needleColor: Colors.white,
-                    value: _speed,
-                    knobStyle: const KnobStyle(color: Colors.white))
-              ],
               annotations: <GaugeAnnotation>[
                 GaugeAnnotation(
-                    widget: Text('${_speed.floor()}km/h',
-                        style: const TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white)),
-                    angle: 90,
-                    positionFactor: 0.5)
+                  widget: Text(_speed.floor().toString(),
+                      style: const TextStyle(
+                          fontSize: 64,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white)),
+                  angle: 90,
+                ),
+                const GaugeAnnotation(
+                  widget: Text('km/h',
+                      style: TextStyle(fontSize: 18, color: Colors.white30)),
+                  angle: 90,
+                  positionFactor: 0.25,
+                )
               ])
         ]);
   }
@@ -115,7 +125,21 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[_getGauge()],
+          children: <Widget>[
+            _getGauge(),
+            const Text("MAX SPEED",
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.pinkAccent,
+                    fontWeight: FontWeight.bold)),
+            Container(
+                margin: const EdgeInsets.only(top: 2.5),
+                child: Text('${_maxSpeed.floor()} km/h',
+                    style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)))
+          ],
         ),
       ),
     );

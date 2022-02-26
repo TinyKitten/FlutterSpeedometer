@@ -121,11 +121,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.bold)),
             Container(
                 margin: const EdgeInsets.only(top: 2.5),
-                child: Text('${_maxSpeed.floor()} km/h',
-                    style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)))
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('${_maxSpeed.floor()}',
+                          style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
+                      Container(
+                        margin: const EdgeInsets.only(left: 2.5),
+                        child: const Text('km/h',
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      )
+                    ]))
           ],
         ),
       ),

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -32,7 +30,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   double _speed = 0.0;
   double _maxSpeed = 0.0;
-  StreamSubscription<Position>? _positionStream;
 
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.bestForNavigation,
@@ -46,9 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _updateLocation() {
-    _positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings)
-            .listen((position) {
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((position) {
       setState(() {
         _speed = (position.speed * 3.6).floor().toDouble();
       });
@@ -58,15 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     });
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-    if (_positionStream != null) {
-      _positionStream!.cancel();
-      _positionStream = null;
-    }
   }
 
   Widget _getGauge() {
@@ -84,23 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   thickness: 0.15,
                   thicknessUnit: GaugeSizeUnit.factor,
                   color: Colors.white10),
-              ranges: <GaugeRange>[
-                GaugeRange(
-                    startValue: 0,
-                    endValue: _speed,
-                    gradient: const SweepGradient(colors: <Color>[
-                      Color(0xff12c2e9),
-                      Color(0xffc471ed),
-                      Color(0xfff64f59),
-                    ], stops: <double>[
-                      0,
-                      0.5,
-                      1
-                    ]),
-                    sizeUnit: GaugeSizeUnit.factor,
-                    startWidth: 0.15,
-                    endWidth: 0.15)
-              ],
               annotations: <GaugeAnnotation>[
                 GaugeAnnotation(
                   widget: Text(_speed.floor().toString(),
@@ -115,7 +85,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: TextStyle(fontSize: 18, color: Colors.white30)),
                   angle: 90,
                   positionFactor: 0.25,
-                )
+                ),
+              ],
+              pointers: [
+                RangePointer(
+                    value: _speed,
+                    gradient: const SweepGradient(colors: <Color>[
+                      Color(0xff12c2e9),
+                      Color(0xffc471ed),
+                      Color(0xfff64f59),
+                    ], stops: <double>[
+                      0,
+                      0.5,
+                      1
+                    ]),
+                    sizeUnit: GaugeSizeUnit.factor,
+                    width: 0.15,
+                    enableAnimation: true),
               ])
         ]);
   }

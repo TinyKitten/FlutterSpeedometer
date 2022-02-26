@@ -14,8 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Speedometer',
-      theme:
-          ThemeData(primarySwatch: Colors.blueGrey, fontFamily: 'sans-serif'),
+      theme: ThemeData(primarySwatch: Colors.grey, fontFamily: 'sans-serif'),
       home: const MyHomePage(),
     );
   }
